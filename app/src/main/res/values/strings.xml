@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_all_builds">Show all builds</string>
+
+    <string name="system_updates">System updates</string>
+    <string name="update_avail">A system update is available.</string>
+    <string name="update_not_avail">Your system is up to date.</string>
+    <string name="last_checked">Last checked for update at %s</string>
+    <string name="update_check_failed">Update check failed!</string>
+
+    <string name="check_now">Check now</string>
+    <string name="download_update">Download update</string>
+    <string name="install_update">Install update</string>
+    <string name="delete_update">Delete update</string>
+
+    <string name="device">Device</string>
+    <string name="channel">Channel</string>
+    <string name="date">Date</string>
+    <string name="filename">Filename</string>
+
+    <!-- DOWNLOADS/NOTIFICATIONS -->
+    <string name="downloading_system_update">Downloading system update…</string>
+    <string name="download_get_notified">We will notify you once the download is complete :)</string>
+    <string name="cancel_download">Cancel download</string>
+    <string name="cancel_download_summary">Do you want to cancel the current system update download?</string>
+    <string name="system_update_ready">System update is ready!</string>
+    <string name="system_update_ready_message">The device will automatically reboot and install the system update.</string>
+
+    <!-- DOWNLOAD ERRORS -->
+    <string name="error_cannot_resume">Error: The download could not be resumed</string>
+    <string name="error_device_not_found">Error: Sdcard not mounted</string>
+    <string name="error_file_already_exists">Error: File already exists</string>
+    <string name="error_file_error">Error: Storage error</string>
+    <string name="error_http_data_error">Error: HTTP error</string>
+    <string name="error_insufficient_space">Error: No space left</string>
+    <string name="error_too_many_redirects">Error: Too many redirects</string>
+    <string name="error_unhandled_http_code">Error: Unhandled http code</string>
+    <string name="error_unknown">Error: Unknown</string>
+    <string name="error_device_not_found_title">Device not found</string>
+    <string name="error_device_not_found_summary">A system update for your device was not found. Please check manually.</string>
+    <string name="error_device_not_found_server">A system update for your device was not found.</string>
+
+    <!-- INSTALL -->
+    <string name="select_actions">Select the actions you would like to perform</string>
+    <string name="backup">Backup</string>
+    <string name="wipe_data">Wipe Data</string>
+    <string name="wipe_caches">Wipe Cache &amp; Dalvik</string>
+    <string name="alert_backup_space_title">Space left</string>
+    <string name="alert_backup_space_message">There is less than %1$sGB in the internal SD card. Do you want to continue with the backup?</string>
+    <string name="alert_backup_title">Backup</string>
+    <string name="alert_backup_message">Specify the backup name (illegal characters will be removed).\n\nThe following options will only work with TWRP.</string>
+    <string name="system">System</string>
+    <string name="data">Data</string>
+    <string name="cache">Cache</string>
+    <string name="recovery">Recovery</string>
+    <string name="boot">Boot</string>
+    <string name="androidsecure">Android secure</string>
+    <string name="sdext">SD-Ext</string>
+    <string name="alert_reboot_install_title">Install system update</string>
+    <string name="alert_reboot_one_message">Your device will reboot and install the system update.</string>
+    <string name="alert_reboot_now">Install now</string>
+
+</resources>
