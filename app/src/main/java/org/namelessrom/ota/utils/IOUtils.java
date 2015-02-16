@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class IOUtils {
     public static final String DOWNLOAD_PATH = new File(Environment.getExternalStorageDirectory(),
             "Nameless/OTA/").getAbsolutePath();
-    public static final String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String FLASH_AFTER_UPDATE = "FlashAfterUpdate";
 
     private static IOUtils sInstance;
 
@@ -53,9 +53,16 @@ public class IOUtils {
     }
 
     public void setupDownloadPath() {
-        final File downloadPath = new File(DOWNLOAD_PATH);
-        if (!downloadPath.isDirectory()) {
-            Logger.v(this, "creating download directories: %s", downloadPath.mkdirs());
+        // create base directory
+        createDirectory(new File(DOWNLOAD_PATH));
+
+        // create flash after update directory
+        createDirectory(new File(DOWNLOAD_PATH, FLASH_AFTER_UPDATE));
+    }
+
+    private void createDirectory(final File file) {
+        if (!file.isDirectory()) {
+            Logger.v(this, "creating directory: %s", file.mkdirs());
         }
     }
 
@@ -85,8 +92,8 @@ public class IOUtils {
             return;
         }
 
-        ArrayList<String> mounts = new ArrayList<String>();
-        ArrayList<String> vold = new ArrayList<String>();
+        final ArrayList<String> mounts = new ArrayList<>();
+        final ArrayList<String> vold = new ArrayList<>();
 
         String cmdOutput = Utils.getCommandResult("cat /proc/mounts;\n");
         if (cmdOutput == null) cmdOutput = "";
@@ -206,7 +213,8 @@ public class IOUtils {
     }
 
     public boolean hasAndroidSecure() {
-        return folderExists(SDCARD + "/.android-secure");
+        final String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
+        return folderExists(externalStorage + "/.android-secure");
     }
 
     public boolean hasSdExt() {

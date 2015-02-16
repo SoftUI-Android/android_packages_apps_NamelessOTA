@@ -20,15 +20,13 @@
 
 package org.namelessrom.ota.utils.recovery;
 
-import android.content.Context;
-
 public abstract class RecoveryInfo {
 
-    public static final int CWM_BASED  = 0;
+    public static final int CWM_BASED = 0;
     public static final int TWRP_BASED = 1;
 
     private int id;
-    private String name           = null;
+    private String name = null;
     private String internalSdcard = null;
     private String externalSdcard = null;
 
@@ -69,6 +67,6 @@ public abstract class RecoveryInfo {
 
     public abstract String getCommandsFile();
 
-    public abstract String[] getCommands(Context context, String[] items, String[] originalItems,
-            boolean wipeData, boolean wipeCaches, String backupFolder, String backupOptions);
+    public abstract String[] getCommands(String[] items, boolean wipeData, boolean wipeCaches,
+            String backupFolder, String backupOptions);
 }

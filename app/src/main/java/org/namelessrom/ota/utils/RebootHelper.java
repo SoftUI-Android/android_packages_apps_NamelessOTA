@@ -37,6 +37,7 @@ import org.namelessrom.ota.utils.recovery.RecoveryInfo;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 public class RebootHelper {
 
@@ -47,9 +48,8 @@ public class RebootHelper {
     }
 
     private void showBackupDialog(final Context context) {
-        double spaceLeft = IOUtils.get().getSpaceLeft();
-        if (spaceLeft < 1.0) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        if (IOUtils.get().getSpaceLeft() < 1.0) {
+            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
             alert.setTitle(R.string.alert_backup_space_title);
             alert.setMessage(context.getResources().getString(
                     R.string.alert_backup_space_message, 1.0));
@@ -103,12 +103,10 @@ public class RebootHelper {
         }
 
         alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
+            @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
-
-                String text = input.getText().toString();
-                text = text.replaceAll("[^a-zA-Z0-9.-]", "");
+                final String text = input.getText().toString().replaceAll("[^a-zA-Z0-9.-]", "");
 
                 String backupOptions = "";
                 if (cbSystem.isChecked()) {
@@ -175,47 +173,65 @@ public class RebootHelper {
         alert.show();
     }
 
-    private void reboot(final Context context, final String backupFolder,
-            final String backupOptions) {
+    private void reboot(final Context context, final String backupFolder, final String options) {
+        boolean hasError = false;
         try {
-            File f = new File("/cache/recovery/command");
+            final File f = new File("/cache/recovery/command");
             f.delete();
 
             final String updateZipPath =
                     new File(IOUtils.DOWNLOAD_PATH, "update.zip").getAbsolutePath();
-            final String[] fakeArray = { updateZipPath };
-            int[] recoveries = new int[]{
+            final ArrayList<String> fileList = new ArrayList<>();
+            fileList.add(updateZipPath);
+            fileList.addAll(getFlashAfterUpdate());
+
+            final String[] fileArray = fileList.toArray(new String[fileList.size()]);
+            final int[] recoveries = new int[]{
                     RecoveryInfo.TWRP_BASED, RecoveryInfo.CWM_BASED
             };
 
-            for (int i = 0; i < recoveries.length; i++) {
-                String file = mRecoveryHelper.getCommandsFile(recoveries[i]);
+            for (final int recovery : recoveries) {
+                String file = mRecoveryHelper.getCommandsFile(recovery);
 
                 FileOutputStream os = null;
                 try {
                     os = new FileOutputStream("/cache/recovery/" + file, false);
 
-                    String[] commands = mRecoveryHelper.getCommands(recoveries[i], fakeArray,
-                            fakeArray, false, true, backupFolder, backupOptions);
+                    final String[] commands = mRecoveryHelper.getCommands(recovery, fileArray,
+                            false, true, backupFolder, options);
                     if (commands != null) {
-                        int size = commands.length, j = 0;
-                        for (; j < size; j++) {
-                            os.write((commands[j] + "\n").getBytes("UTF-8"));
+                        for (final String command : commands) {
+                            os.write((command + "\n").getBytes("UTF-8"));
                         }
                     }
                 } finally {
                     if (os != null) {
                         os.close();
-                        FileUtils.setPermissions("/cache/recovery/" + file, 0644,
-                                android.os.Process.myUid(), 2001);
                     }
+                    FileUtils.setPermissions("/cache/recovery/" + file, 0644,
+                            android.os.Process.myUid(), 2001);
                 }
             }
-
-            ((PowerManager) context.getSystemService(Activity.POWER_SERVICE)).reboot("recovery");
-
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(this, "An exception occured", e);
+            hasError = true;
         }
+
+        if (!hasError) {
+            ((PowerManager) context.getSystemService(Activity.POWER_SERVICE)).reboot("recovery");
+        }
+    }
+
+    private ArrayList<String> getFlashAfterUpdate() {
+        final ArrayList<String> fileList = new ArrayList<>();
+        final File baseDir = new File(IOUtils.DOWNLOAD_PATH, IOUtils.FLASH_AFTER_UPDATE);
+        if (!baseDir.exists()) {
+            return fileList;
+        }
+        final File[] files = baseDir.listFiles();
+        for (final File f : files) {
+            fileList.add(f.getAbsolutePath());
+        }
+        return fileList;
     }
 }

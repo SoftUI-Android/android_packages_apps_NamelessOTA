@@ -7,8 +7,6 @@ android {
         applicationId "org.namelessrom.ota"
         minSdkVersion 21
         targetSdkVersion 321
-        versionCode 1
-        versionName "1.0"
     }
     signingConfigs {
         release {
@@ -38,8 +36,6 @@ android {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
-            applicationIdSuffix '.dev'
-            versionNameSuffix '-dev'
         }
     }
 

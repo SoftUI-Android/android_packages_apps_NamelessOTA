@@ -24,13 +24,18 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.namelessrom.ota.SystemUpdateActivity;
+import org.namelessrom.ota.utils.Logger;
 import org.namelessrom.ota.utils.Utils;
 
 public class DownloadReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+        if (intent == null) {
+            Logger.wtf(this, "intent is null!");
+            return;
+        }
+        final long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
         final Intent i = new Intent(context, SystemUpdateActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP

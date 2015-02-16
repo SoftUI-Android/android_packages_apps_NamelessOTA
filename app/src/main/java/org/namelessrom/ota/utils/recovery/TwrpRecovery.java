@@ -20,8 +20,6 @@
 
 package org.namelessrom.ota.utils.recovery;
 
-import android.content.Context;
-
 import org.namelessrom.ota.utils.IOUtils;
 
 import java.util.ArrayList;
@@ -44,40 +42,35 @@ public class TwrpRecovery extends RecoveryInfo {
     }
 
     @Override
-    public String[] getCommands(Context context, String[] items, String[] originalItems,
-            boolean wipeData, boolean wipeCaches, String backupFolder, String backupOptions) {
-        List<String> commands = new ArrayList<String>();
-
-        int size = items.length, i = 0;
-
-        boolean hasAndroidSecure = IOUtils.get().hasAndroidSecure();
-        boolean hasSdExt = IOUtils.get().hasSdExt();
-
+    public String[] getCommands(String[] items, boolean wipeData, boolean wipeCaches,
+            String backupFolder, String backupOptions) {
+        final List<String> commands = new ArrayList<>();
         commands.add("set tw_signed_zip_verify 0");
 
         if (backupFolder != null) {
             String str = "backup ";
-            if (backupOptions != null && backupOptions.contains("S")) {
-                str += "S";
-            }
-            if (backupOptions != null && backupOptions.contains("D")) {
-                str += "D";
-            }
-            if (backupOptions != null && backupOptions.contains("C")) {
-                str += "C";
-            }
-            if (backupOptions != null && backupOptions.contains("R")) {
-                str += "R";
-            }
-            str += "123";
-            if (backupOptions != null && backupOptions.contains("B")) {
-                str += "B";
-            }
-            if (backupOptions != null && backupOptions.contains("A") && hasAndroidSecure) {
-                str += "A";
-            }
-            if (backupOptions != null && backupOptions.contains("E") && hasSdExt) {
-                str += "E";
+            if (backupOptions != null) {
+                if (backupOptions.contains("S")) {
+                    str += "S";
+                }
+                if (backupOptions.contains("D")) {
+                    str += "D";
+                }
+                if (backupOptions.contains("C")) {
+                    str += "C";
+                }
+                if (backupOptions.contains("R")) {
+                    str += "R";
+                }
+                if (backupOptions.contains("B")) {
+                    str += "B";
+                }
+                if (backupOptions.contains("A") && IOUtils.get().hasAndroidSecure()) {
+                    str += "A";
+                }
+                if (backupOptions.contains("E") && IOUtils.get().hasSdExt()) {
+                    str += "E";
+                }
             }
             commands.add(str + "O " + backupFolder);
         }
@@ -90,8 +83,8 @@ public class TwrpRecovery extends RecoveryInfo {
             commands.add("wipe dalvik");
         }
 
-        for (; i < size; i++) {
-            commands.add("install " + items[i]);
+        for (final String item : items) {
+            commands.add("install " + item);
         }
 
         return commands.toArray(new String[commands.size()]);

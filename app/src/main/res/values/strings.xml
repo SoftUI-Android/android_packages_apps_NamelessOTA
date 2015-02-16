@@ -14,6 +14,7 @@
     <string name="install_update">Install update</string>
     <string name="delete_update">Delete update</string>
 
+    <string name="latest_update">Latest update</string>
     <string name="device">Device</string>
     <string name="channel">Channel</string>
     <string name="date">Date</string>

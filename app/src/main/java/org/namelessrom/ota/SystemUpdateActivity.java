@@ -265,7 +265,8 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
 
     private String getUpdateEntryMsg(final UpdateEntry entry) {
         if (entry == null) return "";
-        return String.format("%s: %s\n%s: %s\n%s: %s\n%s: %s\n%s: %s",
+        return String.format("%s:\n%s: %s\n%s: %s\n%s: %s\n%s: %s\n%s: %s",
+                getString(R.string.latest_update),
                 getString(R.string.device), entry.codename,
                 getString(R.string.channel), entry.channel,
                 getString(R.string.date), entry.timestamp,

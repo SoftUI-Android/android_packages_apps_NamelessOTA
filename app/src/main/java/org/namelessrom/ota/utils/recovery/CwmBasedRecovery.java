@@ -21,9 +21,9 @@
 package org.namelessrom.ota.utils.recovery;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Environment;
 import android.os.storage.StorageManager;
+import android.text.TextUtils;
 
 import org.namelessrom.ota.utils.IOUtils;
 
@@ -47,23 +47,19 @@ public class CwmBasedRecovery extends RecoveryInfo {
     }
 
     @Override
-    public String[] getCommands(Context context, String[] items, String[] originalItems,
-            boolean wipeData, boolean wipeCaches, String backupFolder, String backupOptions) {
+    public String[] getCommands(String[] items, boolean wipeData, boolean wipeCaches,
+            String backupFolder, String backupOptions) {
+        final List<String> commands = new ArrayList<>();
+        final String internalStorage = getInternalSdcard();
 
-        List<String> commands = new ArrayList<String>();
-
-        int size = items.length, i = 0;
-
-        String internalStorage = getInternalSdcard();
-
-        if (backupFolder != null) {
+        if (!TextUtils.isEmpty(backupFolder)) {
             commands.add("assert(backup_rom(\"/data/media/clockworkmod/backup/"
                     + backupFolder + "\"));");
         }
 
         if (wipeData) {
             commands.add("format(\"/data\");");
-            commands.add("format(\"" + internalStorage + "/.android_secure\");");
+            commands.add(String.format("format(\"%s/.android_secure\");", internalStorage));
         }
         if (wipeCaches) {
             commands.add("format(\"/cache\");");
@@ -72,12 +68,12 @@ public class CwmBasedRecovery extends RecoveryInfo {
             commands.add("format(\"/sd-ext/dalvik-cache\");");
         }
 
-        if (size > 0) {
+        if (items.length > 0) {
             if (IOUtils.get().isExternalStorageAvailable()) {
                 commands.add("run_program(\"/sbin/mount\", \"" + getExternalSdcard() + "\");");
             }
-            for (; i < size; i++) {
-                commands.add("assert(install_zip(\"" + items[i] + "\"));");
+            for (final String item : items) {
+                commands.add("assert(install_zip(\"" + item + "\"));");
             }
         }
 
@@ -88,108 +84,62 @@ public class CwmBasedRecovery extends RecoveryInfo {
         if (Environment.getExternalStorageDirectory() == null) {
             return "sdcard";
         }
+        final String sdcard = "/sdcard";
         String path, dirPath;
         dirPath = path = Environment.getExternalStorageDirectory().getAbsolutePath();
-        dirPath = replace(
-                replace(replace(dirPath, "/mnt/sdcard", "/sdcard"), "/mnt/emmc", "/emmc"), path,
-                "/sdcard");
-        if (Build.VERSION.SDK_INT > 16) {
-            String emulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
-            if ((emulatedStorageTarget != null) && (path.startsWith(emulatedStorageTarget))) {
-                String number = path.replace(emulatedStorageTarget, "");
-                dirPath = replace(dirPath, "/sdcard", "/sdcard" + number);
-            }
-            String emulatedStorageSource = System.getenv("EMULATED_STORAGE_SOURCE");
-            if (emulatedStorageSource != null) {
-                dirPath = replace(dirPath, emulatedStorageSource, "/data/media");
-            }
-            if (emulatedStorageTarget == null && emulatedStorageSource == null
-                    && "/storage/sdcard0".equals(path) && "/sdcard".equals(dirPath)) {
-                dirPath = path;
-            }
-        } else if (dirPath.startsWith("/mnt/emmc")) {
-            dirPath = "emmc";
+        dirPath = replace(replace(replace(dirPath, "/mnt/sdcard", sdcard), "/mnt/emmc", "/emmc"),
+                path, sdcard);
+
+        final String emulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
+        if ((emulatedStorageTarget != null) && (path.startsWith(emulatedStorageTarget))) {
+            final String number = path.replace(emulatedStorageTarget, "");
+            dirPath = replace(dirPath, sdcard, sdcard + number);
+        }
+
+        final String emulatedStorageSource = System.getenv("EMULATED_STORAGE_SOURCE");
+        if (emulatedStorageSource != null) {
+            dirPath = replace(dirPath, emulatedStorageSource, "/data/media");
+        }
+
+        if (emulatedStorageTarget == null && emulatedStorageSource == null
+                && "/storage/sdcard0".equals(path) && sdcard.equals(dirPath)) {
+            dirPath = path;
         }
         return dirPath;
     }
 
-    private String externalStorage(Context paramContext) {
-        String dirPath = null;
-        try {
-            String[] volumePaths = null;
-            ArrayList<String> volumePathsList = null;
-            String path = null;
-            if (Build.VERSION.SDK_INT >= 14) {
-                volumePaths = volumePaths(paramContext);
-                if (volumePaths != null) {
-                    volumePathsList = new ArrayList<String>();
-                    path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                }
+    private String externalStorage(final Context context) {
+        final StorageManager storageManager =
+                (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+
+        final String primaryVolumePath = storageManager.getPrimaryVolume().getPath();
+        final String[] volumePaths = storageManager.getVolumePaths();
+        final ArrayList<String> volumePathsList = new ArrayList<>();
+        final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+        final int i = volumePaths == null ? 0 : volumePaths.length;
+        for (int j = 0; j < i; j++) {
+            String volumePath = volumePaths[j];
+
+            if ((volumePath.equals(System.getenv("EMULATED_STORAGE_SOURCE")))
+                    || (volumePath.equals(System.getenv("EXTERNAL_STORAGE")))
+                    || (volumePath.equals(path))
+                    || (volumePath.equals(primaryVolumePath))
+                    || (volumePath.toLowerCase().contains("usb"))) {
+                continue;
             }
-            try {
-                String primaryVolumePath = primaryVolumePath(paramContext);
-                int i = volumePaths.length;
-                for (int j = 0; ; j++) {
-                    if (j < i) {
-                        String volumePath = volumePaths[j];
-                        try {
-                            if ((volumePath.equals(System.getenv("EMULATED_STORAGE_SOURCE")))
-                                    || (volumePath.equals(System.getenv("EXTERNAL_STORAGE")))
-                                    || (volumePath.equals(path))
-                                    || (volumePath.equals(primaryVolumePath))
-                                    || (volumePath.toLowerCase().contains("usb"))) { continue; }
-                            volumePathsList.add(volumePath);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    } else {
-                        if (volumePathsList.size() == 1) {
-                            dirPath = (String) volumePathsList.get(0);
-                        }
-                        return dirPath;
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            volumePathsList.add(volumePath);
         }
-        return dirPath;
-    }
-
-    private String[] volumePaths(Context context) {
-        try {
-            StorageManager localStorageManager = (StorageManager) context
-                    .getSystemService(Context.STORAGE_SERVICE);
-            return (String[]) (String[]) localStorageManager.getClass()
-                    .getMethod("getVolumePaths", new Class[0])
-                    .invoke(localStorageManager, new Object[0]);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+        if (volumePathsList.size() == 1) {
+            return volumePathsList.get(0);
         }
-    }
-
-    private String primaryVolumePath(Context context) {
-        try {
-            StorageManager localStorageManager = (StorageManager) context
-                    .getSystemService(Context.STORAGE_SERVICE);
-            Object localObject = localStorageManager.getClass()
-                    .getMethod("getPrimaryVolume", new Class[0])
-                    .invoke(localStorageManager, new Object[0]);
-            return (String) localObject.getClass().getMethod("getPath", new Class[0])
-                    .invoke(localObject, new Object[0]);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+        return null;
     }
 
     private String replace(String original, String starts, String replace) {
-        return !original.startsWith(starts) ? original : replace
-                + original.substring(starts.length());
+        return !original.startsWith(starts)
+                ? original
+                : replace + original.substring(starts.length());
     }
 
 }
