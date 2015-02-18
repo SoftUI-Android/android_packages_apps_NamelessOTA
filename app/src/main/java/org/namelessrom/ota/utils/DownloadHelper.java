@@ -60,7 +60,7 @@ public class DownloadHelper {
         public abstract void onDownloadError(String reason);
     }
 
-    private static Runnable sUpdateProgress = new Runnable() {
+    private static final Runnable sUpdateProgress = new Runnable() {
 
         public void run() {
             if (!sDownloadingRom) {
@@ -153,11 +153,10 @@ public class DownloadHelper {
                     sCallback.onDownloadError(sContext.getResources().getString(reasonText));
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
-                    if (installIfFinished) {
-                        String uriString = cursor.getString(cursor
-                                .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-                        sCallback.onDownloadFinished(Uri.parse(uriString), md5);
-                    }
+                    sDownloadingRom = false;
+                    final String uriString = cursor.getString(cursor
+                            .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                    sCallback.onDownloadFinished(Uri.parse(uriString), md5);
                     downloadSuccessful(/*id*/);
                     break;
                 default:
@@ -256,6 +255,9 @@ public class DownloadHelper {
                         .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                 totalBytes = cursor.getLong(cursor
                         .getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                break;
+            case DownloadManager.STATUS_SUCCESSFUL:
+                sDownloadingRom = false;
                 break;
             case DownloadManager.STATUS_FAILED:
                 sDownloadingRom = false;
