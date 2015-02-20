@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,9 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
 
     private TextView mTitle;
     private ProgressBar mDownloadProgress;
-    private TextView mMessage;
+    private TextView mLastChecked;
+    private LinearLayout mLatestUpdateContainer;
+    private TextView mLatestUpdate;
     private Button mAction;
     private Button mExtraAction;
 
@@ -90,8 +93,12 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         mTitle = (TextView) findViewById(R.id.title);
         mDownloadProgress = (ProgressBar) findViewById(R.id.download_progress);
 
-        mMessage = (TextView) findViewById(R.id.message);
-        mMessage.setText(getString(R.string.last_checked, getTime()));
+        mLastChecked = (TextView) findViewById(R.id.last_checked);
+        mLastChecked.setText(getString(R.string.last_checked, getTime()));
+
+        mLatestUpdateContainer = (LinearLayout) findViewById(R.id.container_latest_update);
+        mLatestUpdateContainer.setVisibility(View.INVISIBLE);
+        mLatestUpdate = (TextView) findViewById(R.id.latest_update);
 
         mAction = (Button) findViewById(R.id.action_button);
         mAction.setOnClickListener(new View.OnClickListener() {
@@ -138,25 +145,27 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
             }
         }
         // if our update entry is not null, compare the timestamps
-        mUpdateAvailable = mUpdateEntry != null && (Utils.getBuildDate() < mUpdateEntry.timestamp);
+        final boolean hasUpdateEntry = mUpdateEntry != null;
+        mUpdateAvailable = hasUpdateEntry && (Utils.getBuildDate() < mUpdateEntry.timestamp);
+        mLatestUpdateContainer.setVisibility(hasUpdateEntry ? View.VISIBLE : View.INVISIBLE);
 
         if (DownloadHelper.isDownloading()) {
             mTitle.setText(R.string.downloading_system_update);
-            mMessage.setText(getString(R.string.download_get_notified) + '\n' + '\n'
+            mLastChecked.setText(getString(R.string.download_get_notified) + '\n' + '\n'
                     + getUpdateEntryMsg(mUpdateEntry));
             mAction.setText(R.string.cancel_download);
             return;
         } else if (DownloadHelper.isDownloaded()) {
             mTitle.setText(R.string.system_update_ready);
-            mMessage.setText(R.string.system_update_ready_message);
+            mLastChecked.setText(R.string.system_update_ready_message);
             mAction.setText(R.string.install_update);
             mExtraAction.setVisibility(View.VISIBLE);
             return;
         }
 
         mTitle.setText(mUpdateAvailable ? R.string.update_avail : R.string.update_not_avail);
-        mMessage.setText(getString(R.string.last_checked, getTime()) + '\n' + '\n'
-                + getUpdateEntryMsg(mUpdateEntry));
+        mLastChecked.setText(getString(R.string.last_checked, getTime()));
+        mLatestUpdate.setText(getUpdateEntryMsg(mUpdateEntry));
         mAction.setText(mUpdateAvailable ? R.string.download_update : R.string.check_now);
         mExtraAction.setVisibility(View.INVISIBLE);
     }
@@ -265,11 +274,10 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
 
     private String getUpdateEntryMsg(final UpdateEntry entry) {
         if (entry == null) return "";
-        return String.format("%s:\n%s: %s\n%s: %s\n%s: %s\n%s: %s\n%s: %s",
-                getString(R.string.latest_update),
-                getString(R.string.device), entry.codename,
-                getString(R.string.channel), entry.channel,
+        return String.format("%s: %s\n%s: %s\n%s: %s\n%s: %s\n%s: %s",
                 getString(R.string.date), entry.timestamp,
+                getString(R.string.device), entry.codename,
+                getString(R.string.type), entry.channel,
                 getString(R.string.filename), entry.filename,
                 getString(R.string.md5), entry.md5sum);
     }
@@ -301,7 +309,7 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
     }
 
     @Override
-    public void onDownloadError(String reason) {
+    public void onDownloadError() {
         if (mDownloadProgress != null) mDownloadProgress.setProgress(0);
         updateUi();
     }

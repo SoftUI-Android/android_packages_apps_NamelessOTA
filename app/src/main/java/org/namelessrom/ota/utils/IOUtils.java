@@ -38,7 +38,6 @@ public class IOUtils {
     private static boolean sSdcardsChecked;
 
     private String sPrimarySdcard;
-    private String sSecondarySdcard;
 
     private IOUtils() {
         setupDownloadPath();
@@ -68,23 +67,6 @@ public class IOUtils {
 
     public boolean isExternalStorageAvailable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-    }
-
-    public boolean isInSecondaryStorage(String path) {
-        return !path.startsWith(sPrimarySdcard) && !path.startsWith("/sdcard")
-                && !path.startsWith("/mnt/sdcard");
-    }
-
-    public boolean hasSecondarySdCard() {
-        return sSecondarySdcard != null;
-    }
-
-    public String getPrimarySdCard() {
-        return sPrimarySdcard;
-    }
-
-    public String getSecondarySdCard() {
-        return sSecondarySdcard;
     }
 
     private void readMounts() {
@@ -153,7 +135,8 @@ public class IOUtils {
             vold.add("/mnt/sdcard");
         }
 
-        for (int i = 0; i < mounts.size(); i++) {
+        final int length = mounts.size();
+        for (int i = 0; i < length; i++) {
             String mount = mounts.get(i);
             File root = new File(mount);
             if (!vold.contains(mount)
@@ -163,10 +146,9 @@ public class IOUtils {
         }
 
         for (final String mount : mounts) {
-            if (!mount.contains("sdcard0") && !mount.equalsIgnoreCase("/mnt/sdcard")
-                    && !mount.equalsIgnoreCase("/sdcard")) {
-                sSecondarySdcard = mount;
-            } else {
+            if (mount.contains("sdcard0")
+                    || mount.equalsIgnoreCase("/mnt/sdcard")
+                    || mount.equalsIgnoreCase("/sdcard")) {
                 sPrimarySdcard = mount;
             }
         }

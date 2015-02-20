@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:fontFamily="@string/font_light"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="?android:attr/colorAccent"
         tools:text="Ihr System ist momentan auf dem neuesten Stand." />
 
     <ProgressBar
@@ -29,13 +31,40 @@
         tools:progress="10" />
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/last_checked"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:fontFamily="@string/font_light"
         tools:text="Letzte Update-Überprüfung um 17:57" />
+
+    <LinearLayout
+        android:id="@+id/container_latest_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/colorAccent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/latest_update" />
+
+        <TextView
+            android:id="@+id/latest_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="@string/font_light"
+            android:paddingTop="10dp"
+            android:textIsSelectable="true"
+            tools:text="@string/dummy_latest_update" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/changelog_container"

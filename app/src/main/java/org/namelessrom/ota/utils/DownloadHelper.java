@@ -26,7 +26,6 @@ import android.app.DownloadManager.Request;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Handler;
 
@@ -57,7 +56,7 @@ public class DownloadHelper {
 
         public abstract void onDownloadFinished(Uri uri, String md5);
 
-        public abstract void onDownloadError(String reason);
+        public abstract void onDownloadError();
     }
 
     private static final Runnable sUpdateProgress = new Runnable() {
@@ -83,9 +82,7 @@ public class DownloadHelper {
                     sCallback.onDownloadProgress(-1);
                     break;
                 case DownloadManager.STATUS_FAILED:
-                    int error = (int) statusRom[3];
-                    sCallback.onDownloadError(error == -1 ? null : sContext.getResources()
-                            .getString(error));
+                    sCallback.onDownloadError();
                     break;
                 default:
                     long totalBytes = statusRom[1];
@@ -131,10 +128,10 @@ public class DownloadHelper {
             sDownloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         }
         sPreferenceHelper = PreferenceHelper.get(context);
-        checkDownloadFinished(downloadId, true);
+        checkDownloadFinished(downloadId);
     }
 
-    private static void checkDownloadFinished(long downloadId, boolean installIfFinished) {
+    private static void checkDownloadFinished(long downloadId) {
         long id = sPreferenceHelper.getDownloadRomId();
         if (id == -1L || (downloadId != 0 && downloadId != id)) {
             return;
@@ -149,8 +146,7 @@ public class DownloadHelper {
             switch (status) {
                 case DownloadManager.STATUS_FAILED:
                     removeDownload(id, true);
-                    int reasonText = getDownloadError(cursor);
-                    sCallback.onDownloadError(sContext.getResources().getString(reasonText));
+                    sCallback.onDownloadError();
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
                     sDownloadingRom = false;
@@ -244,7 +240,6 @@ public class DownloadHelper {
             status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
         }
 
-        long error = -1;
         long totalBytes = -1;
         long downloadedBytes = -1;
 
@@ -261,7 +256,6 @@ public class DownloadHelper {
                 break;
             case DownloadManager.STATUS_FAILED:
                 sDownloadingRom = false;
-                error = getDownloadError(cursor);
                 break;
         }
 
@@ -269,9 +263,7 @@ public class DownloadHelper {
             cursor.close();
         }
 
-        return new long[]{
-                status, totalBytes, downloadedBytes, error
-        };
+        return new long[]{ status, totalBytes, downloadedBytes };
     }
 
     private static void checkIfDownloading() {
@@ -284,47 +276,5 @@ public class DownloadHelper {
         if (romId >= 0L && !sDownloadingRom) {
             removeDownload(romId, false);
         }
-    }
-
-    private static int getDownloadError(Cursor cursor) {
-        int columnReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
-        int reasonText;
-        try {
-            int reason = cursor.getInt(columnReason);
-            switch (reason) {
-                case DownloadManager.ERROR_CANNOT_RESUME:
-                    reasonText = R.string.error_cannot_resume;
-                    break;
-                case DownloadManager.ERROR_DEVICE_NOT_FOUND:
-                    reasonText = R.string.error_device_not_found;
-                    break;
-                case DownloadManager.ERROR_FILE_ALREADY_EXISTS:
-                    reasonText = R.string.error_file_already_exists;
-                    break;
-                case DownloadManager.ERROR_FILE_ERROR:
-                    reasonText = R.string.error_file_error;
-                    break;
-                case DownloadManager.ERROR_HTTP_DATA_ERROR:
-                    reasonText = R.string.error_http_data_error;
-                    break;
-                case DownloadManager.ERROR_INSUFFICIENT_SPACE:
-                    reasonText = R.string.error_insufficient_space;
-                    break;
-                case DownloadManager.ERROR_TOO_MANY_REDIRECTS:
-                    reasonText = R.string.error_too_many_redirects;
-                    break;
-                case DownloadManager.ERROR_UNHANDLED_HTTP_CODE:
-                    reasonText = R.string.error_unhandled_http_code;
-                    break;
-                case DownloadManager.ERROR_UNKNOWN:
-                default:
-                    reasonText = R.string.error_unknown;
-                    break;
-            }
-        } catch (CursorIndexOutOfBoundsException ex) {
-            // don't crash, just report it
-            reasonText = R.string.error_unknown;
-        }
-        return reasonText;
     }
 }

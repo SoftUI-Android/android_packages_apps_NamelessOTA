@@ -5,4 +5,7 @@
     <string name="font_light" translatable="false">sans-serif-light</string>
 
     <string name="md5" translatable="false">MD5</string>
+
+    <!-- dummy entries for development -->
+    <string name="dummy_latest_update" translatable="false">Date: 20150214\nDevice: find7\nChannel: NIGHTLY\nFilename: nameless–5.0.2–20150214-find7-NIGHTLY.zip\nMD5: 29423861c82229cd2702b4257ce4cf1a</string>
 </resources>

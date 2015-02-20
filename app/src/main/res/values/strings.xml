@@ -16,7 +16,7 @@
 
     <string name="latest_update">Latest update</string>
     <string name="device">Device</string>
-    <string name="channel">Channel</string>
+    <string name="type">Type</string>
     <string name="date">Date</string>
     <string name="filename">Filename</string>
 
@@ -27,20 +27,6 @@
     <string name="cancel_download_summary">Do you want to cancel the current system update download?</string>
     <string name="system_update_ready">System update is ready!</string>
     <string name="system_update_ready_message">The device will automatically reboot and install the system update.</string>
-
-    <!-- DOWNLOAD ERRORS -->
-    <string name="error_cannot_resume">Error: The download could not be resumed</string>
-    <string name="error_device_not_found">Error: Sdcard not mounted</string>
-    <string name="error_file_already_exists">Error: File already exists</string>
-    <string name="error_file_error">Error: Storage error</string>
-    <string name="error_http_data_error">Error: HTTP error</string>
-    <string name="error_insufficient_space">Error: No space left</string>
-    <string name="error_too_many_redirects">Error: Too many redirects</string>
-    <string name="error_unhandled_http_code">Error: Unhandled http code</string>
-    <string name="error_unknown">Error: Unknown</string>
-    <string name="error_device_not_found_title">Device not found</string>
-    <string name="error_device_not_found_summary">A system update for your device was not found. Please check manually.</string>
-    <string name="error_device_not_found_server">A system update for your device was not found.</string>
 
     <!-- INSTALL -->
     <string name="select_actions">Select the actions you would like to perform</string>
