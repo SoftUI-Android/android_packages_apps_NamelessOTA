@@ -30,10 +30,12 @@ public class Device {
 
     public final String name; // ro.product.device
     public final int date;    // ro.nameless.date
+    public final String userAgent;
 
     private Device() {
         name = SystemProperties.get("ro.product.device", UNKNOWN);
         date = SystemProperties.getInt("ro.nameless.date", -1);
+        userAgent = String.format("%s/%s", "org.namelessrom.ota", name);
     }
 
     public static Device get() {
@@ -41,7 +43,7 @@ public class Device {
     }
 
     public String toString() {
-        return String.format("Name: %s", name);
+        return String.format("Name: %s | Date: %s | UserAgent: %s", name, date, userAgent);
     }
 
 }

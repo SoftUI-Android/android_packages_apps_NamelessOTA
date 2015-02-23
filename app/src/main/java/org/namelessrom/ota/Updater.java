@@ -20,15 +20,13 @@ package org.namelessrom.ota;
 
 import android.content.Context;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.namelessrom.ota.listeners.UpdateListener;
+import org.namelessrom.ota.requests.UpdatesJsonArrayRequest;
 import org.namelessrom.ota.utils.Logger;
 
 public class Updater implements Response.Listener<JSONArray>, Response.ErrorListener {
@@ -37,18 +35,17 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
 
     private static final String URL = "https://nameless-rom.org/update/%s/single";
 
-    private RequestQueue mQueue;
-    private UpdateListener mListener;
+    private final Context mContext;
+    private final UpdateListener mListener;
 
     public Updater(final Context context, final UpdateListener listener) {
+        mContext = context;
         mListener = listener;
-
-        mQueue = Volley.newRequestQueue(context);
     }
 
     public void check() {
-        final JsonArrayRequest jsObjRequest = new JsonArrayRequest(getUrl(), this, this);
-        mQueue.add(jsObjRequest);
+        final UpdatesJsonArrayRequest jsArrReq = new UpdatesJsonArrayRequest(getUrl(), this, this);
+        ((UpdateApplication) mContext.getApplicationContext()).getQueue().add(jsArrReq);
     }
 
     private String getUrl() {
