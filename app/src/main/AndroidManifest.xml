@@ -30,6 +30,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="org.namelessrom.ota.UpdatePreferenceActivity"
+            android:label="@string/action_preferences"
+            android:parentActivityName="org.namelessrom.ota.SystemUpdateActivity" />
 
         <receiver android:name="org.namelessrom.ota.receivers.BootupReceiver">
             <intent-filter>
@@ -43,6 +47,8 @@
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name="org.namelessrom.ota.receivers.UpdateCheckReceiver" />
     </application>
 
 </manifest>

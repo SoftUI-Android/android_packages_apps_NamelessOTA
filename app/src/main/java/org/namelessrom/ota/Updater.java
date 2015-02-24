@@ -19,6 +19,7 @@
 package org.namelessrom.ota;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -27,11 +28,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.namelessrom.ota.listeners.UpdateListener;
 import org.namelessrom.ota.requests.UpdatesJsonArrayRequest;
+import org.namelessrom.ota.utils.AlarmScheduler;
 import org.namelessrom.ota.utils.Logger;
+
+import java.util.Date;
 
 public class Updater implements Response.Listener<JSONArray>, Response.ErrorListener {
     public static final String SF_URL =
             "https://sourceforge.net/projects/namelessrom/files/n-2.0/%s/";
+
+    public static final String LAST_UPDATE_CHECK_PREF = "pref_last_update_check";
+
+    public static final String CHECK_DISABLED = "0";
+    public static final String CHECK_DAILY = "1";
+    public static final String CHECK_THIRD_DAY = "2";
+    public static final String CHECK_WEEKLY = "3";
 
     private static final String URL = "https://nameless-rom.org/update/%s/single";
 
@@ -46,6 +57,15 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
     public void check() {
         final UpdatesJsonArrayRequest jsArrReq = new UpdatesJsonArrayRequest(getUrl(), this, this);
         ((UpdateApplication) mContext.getApplicationContext()).getQueue().add(jsArrReq);
+
+        // also note down that we just checked for updates
+        final Date date = new Date();
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit()
+                .putLong(Updater.LAST_UPDATE_CHECK_PREF, date.getTime())
+                .apply();
+
+        // update alarm schedule
+        AlarmScheduler.get(mContext).scheduleAlarm();
     }
 
     private String getUrl() {

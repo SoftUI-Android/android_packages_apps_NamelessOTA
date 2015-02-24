@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="check_frequency"
+        android:title="@string/check_frequency"
+        android:entries="@array/check_frequency_entries"
+        android:entryValues="@array/check_frequency_values"
+        android:defaultValue="2" />
+</PreferenceScreen>

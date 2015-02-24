@@ -252,6 +252,12 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
                 }
                 return true;
             }
+            case R.id.action_preferences: {
+                final Intent intent = new Intent();
+                intent.setClass(SystemUpdateActivity.this, UpdatePreferenceActivity.class);
+                startActivity(intent);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);

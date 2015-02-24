@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_all_builds">Show all updates</string>
+    <string name="action_preferences">Preferences</string>
 
     <string name="system_updates">System updates</string>
     <string name="update_avail">A system update is available.</string>
@@ -46,4 +47,11 @@
     <string name="alert_reboot_install_title">Install system update</string>
     <string name="alert_reboot_one_message">Your device will reboot and install the system update.</string>
     <string name="alert_reboot_now">Install now</string>
+
+    <!-- PREFERENCES -->
+    <string name="check_frequency">Check frequency</string>
+    <string name="disabled">Disabled</string>
+    <string name="daily">Daily</string>
+    <string name="every_third_day">Every third day</string>
+    <string name="weekly">Weekly</string>
 </resources>
