@@ -18,25 +18,23 @@
 
 package org.namelessrom.ota;
 
-import android.app.Application;
-import android.os.SystemProperties;
+import com.google.gson.Gson;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.namelessrom.ota.utils.Logger;
 
-public class UpdateApplication extends Application {
-    private RequestQueue mRequestQueue;
-
-    @Override
-    public void onCreate() {
-        mRequestQueue = Volley.newRequestQueue(this);
-
-        Logger.setEnabled(SystemProperties.getBoolean("ro.nameless.debug", false));
+public abstract class JsonAble {
+    public static String getJsonString(final JSONObject jsonObject, final String key) {
+        try {
+            return jsonObject.getString(key);
+        } catch (JSONException jse) {
+            Logger.e("JsonAble", "getJsonString", jse);
+            return "unknown";
+        }
     }
 
-    public RequestQueue getQueue() {
-        return mRequestQueue;
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }

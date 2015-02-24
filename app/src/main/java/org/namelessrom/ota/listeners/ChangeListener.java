@@ -16,27 +16,12 @@
  * -->
  */
 
-package org.namelessrom.ota.receivers;
+package org.namelessrom.ota.listeners;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.Nullable;
 
-import org.namelessrom.ota.updater.Updater;
-import org.namelessrom.ota.utils.Logger;
+import org.namelessrom.ota.changelog.Change;
 
-public class UpdateCheckReceiver extends BroadcastReceiver {
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent == null) {
-            Logger.wtf(this, "intent is null!");
-            return;
-        }
-
-        Logger.d(this, "checking for updates...");
-        final Updater updater = new Updater(context, null);
-        updater.check();
-    }
-
+public interface ChangeListener {
+    public void onChangesFetched(final boolean success, @Nullable final Change[] changes);
 }

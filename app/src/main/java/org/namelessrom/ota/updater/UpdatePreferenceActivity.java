@@ -16,7 +16,7 @@
  * -->
  */
 
-package org.namelessrom.ota;
+package org.namelessrom.ota.updater;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -25,6 +25,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
+import org.namelessrom.ota.R;
 import org.namelessrom.ota.utils.AlarmScheduler;
 
 @SuppressWarnings("deprecation")

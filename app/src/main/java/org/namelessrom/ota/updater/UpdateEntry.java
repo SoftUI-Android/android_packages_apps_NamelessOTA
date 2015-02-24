@@ -16,14 +16,12 @@
  * -->
  */
 
-package org.namelessrom.ota;
+package org.namelessrom.ota.updater;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.namelessrom.ota.utils.Logger;
+import org.namelessrom.ota.JsonAble;
 import org.namelessrom.ota.utils.Utils;
 
 /**
@@ -40,7 +38,7 @@ import org.namelessrom.ota.utils.Utils;
  * "md5sumdelta":"93ca0c5a1a5b75ceb4ac3382295c2464"
  * }]
  */
-public class UpdateEntry {
+public class UpdateEntry extends JsonAble {
 
     public String json;
     @SerializedName("channel") public String channel;
@@ -64,19 +62,6 @@ public class UpdateEntry {
         timestamp = Utils.tryParseLong(getJsonString(jsonObject, "timestamp"));
         codename = getJsonString(jsonObject, "codename");
         md5sumdelta = getJsonString(jsonObject, "md5sumdelta");
-    }
-
-    private String getJsonString(final JSONObject jsonObject, final String key) {
-        try {
-            return jsonObject.getString(key);
-        } catch (JSONException jse) {
-            Logger.e(this, "getJsonString", jse);
-            return "unknown";
-        }
-    }
-
-    public String toJson() {
-        return new Gson().toJson(this);
     }
 
 }

@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.namelessrom.ota.Device;
-import org.namelessrom.ota.UpdateEntry;
+import org.namelessrom.ota.updater.UpdateEntry;
 import org.namelessrom.ota.utils.AlarmScheduler;
 import org.namelessrom.ota.utils.IOUtils;
 import org.namelessrom.ota.utils.Logger;

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.namelessrom.ota"
-    android:versionCode="2"
-    android:versionName="1.0.1">
+    android:versionCode="3"
+    android:versionName="1.0.2">
 
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+    <uses-sdk android:minSdkVersion="21"
+        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
 
     <application
-        android:name="org.namelessrom.ota.UpdateApplication"
+        android:name=".updater.UpdateApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +32,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.namelessrom.ota.UpdatePreferenceActivity"
+            android:name="org.namelessrom.ota.changelog.ChangelogActivity"
+            android:label="@string/recent_changes"
+            android:parentActivityName="org.namelessrom.ota.SystemUpdateActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.namelessrom.ota.RECENT_CHANGES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".updater.UpdatePreferenceActivity"
             android:label="@string/action_preferences"
             android:parentActivityName="org.namelessrom.ota.SystemUpdateActivity" />
 

@@ -25,8 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.namelessrom.ota.UpdatePreferenceActivity;
-import org.namelessrom.ota.Updater;
+import org.namelessrom.ota.updater.UpdatePreferenceActivity;
+import org.namelessrom.ota.updater.Updater;
 import org.namelessrom.ota.receivers.UpdateCheckReceiver;
 
 import java.text.DateFormat;

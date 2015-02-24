@@ -16,27 +16,27 @@
  * -->
  */
 
-package org.namelessrom.ota.receivers;
+package org.namelessrom.ota.updater;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Application;
+import android.os.SystemProperties;
 
-import org.namelessrom.ota.updater.Updater;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import org.namelessrom.ota.utils.Logger;
 
-public class UpdateCheckReceiver extends BroadcastReceiver {
+public class UpdateApplication extends Application {
+    private RequestQueue mRequestQueue;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent == null) {
-            Logger.wtf(this, "intent is null!");
-            return;
-        }
+    public void onCreate() {
+        mRequestQueue = Volley.newRequestQueue(this);
 
-        Logger.d(this, "checking for updates...");
-        final Updater updater = new Updater(context, null);
-        updater.check();
+        Logger.setEnabled(SystemProperties.getBoolean("ro.nameless.debug", false));
     }
 
+    public RequestQueue getQueue() {
+        return mRequestQueue;
+    }
 }

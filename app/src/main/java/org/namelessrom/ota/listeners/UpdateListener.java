@@ -20,7 +20,7 @@ package org.namelessrom.ota.listeners;
 
 import android.annotation.Nullable;
 
-import org.namelessrom.ota.UpdateEntry;
+import org.namelessrom.ota.updater.UpdateEntry;
 
 public interface UpdateListener {
     public void updateCheckFinished(final boolean success, @Nullable final UpdateEntry updateEntry);

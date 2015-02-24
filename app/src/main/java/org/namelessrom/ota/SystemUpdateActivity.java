@@ -38,7 +38,11 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.namelessrom.ota.changelog.ChangelogActivity;
 import org.namelessrom.ota.listeners.UpdateListener;
+import org.namelessrom.ota.updater.UpdateEntry;
+import org.namelessrom.ota.updater.UpdatePreferenceActivity;
+import org.namelessrom.ota.updater.Updater;
 import org.namelessrom.ota.utils.DownloadHelper;
 import org.namelessrom.ota.utils.IOUtils;
 import org.namelessrom.ota.utils.Logger;
@@ -99,6 +103,14 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         mLatestUpdateContainer = (LinearLayout) findViewById(R.id.container_latest_update);
         mLatestUpdateContainer.setVisibility(View.INVISIBLE);
         mLatestUpdate = (TextView) findViewById(R.id.latest_update);
+
+        final Button recentChanges = (Button) findViewById(R.id.recent_changes);
+        recentChanges.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(final View view) {
+                final Intent i = new Intent(SystemUpdateActivity.this, ChangelogActivity.class);
+                startActivity(i);
+            }
+        });
 
         mAction = (Button) findViewById(R.id.action_button);
         mAction.setOnClickListener(new View.OnClickListener() {

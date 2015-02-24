@@ -16,7 +16,7 @@
  * -->
  */
 
-package org.namelessrom.ota;
+package org.namelessrom.ota.updater;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.namelessrom.ota.Device;
 import org.namelessrom.ota.listeners.UpdateListener;
 import org.namelessrom.ota.requests.UpdatesJsonArrayRequest;
 import org.namelessrom.ota.utils.AlarmScheduler;
