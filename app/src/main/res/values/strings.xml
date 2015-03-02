@@ -2,11 +2,14 @@
 <resources>
     <string name="action_all_builds">Show all updates</string>
     <string name="action_preferences">Preferences</string>
+    <string name="action_toggle_drawer">Toggle drawer</string>
+    <string name="action_refresh">Refresh</string>
 
     <!-- CHANGELOG -->
     <string name="recent_changes">Recent changes</string>
     <string name="recent_changes_notice">Notice: Recent changes are the current state of the project.\nIt does not mean that the most recent build includes the most recent changes!</string>
-    <string name="fetched_changes">Fetched changes: %s</string>
+    <string name="searching_changes">Searching for changes…</string>
+    <string name="found_changes">Found changes: %s</string>
 
     <!-- SYSTEM UPDATES -->
     <string name="system_updates">System updates</string>
@@ -60,4 +63,10 @@
     <string name="daily">Daily</string>
     <string name="every_third_day">Every third day</string>
     <string name="weekly">Weekly</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- PREFERENCES RECENT CHANGES -->
+    <string name="changes_initial">Initial changes</string>
+    <string name="changes_to_fetch">Changes to fetch</string>
+    <string name="changes_to_load">Changes to load: %s</string>
 </resources>

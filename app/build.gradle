@@ -60,4 +60,5 @@ dependencies {
     // source build as jar just to make work easier with android studio
     compile files('libs/gson.jar')
     compile files('libs/volley.jar')
+    compile 'com.android.support:support-v4:21.+'
 }

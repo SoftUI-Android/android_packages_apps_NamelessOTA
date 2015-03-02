@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".changelog.ChangelogActivity">
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/action_refresh"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="100" />
+    <item
+        android:id="@+id/action_toggle_drawer"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/action_toggle_drawer"
+        android:showAsAction="always"
+        android:orderInCategory="100" />
+</menu>

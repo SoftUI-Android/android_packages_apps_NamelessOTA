@@ -18,121 +18,67 @@
 
 package org.namelessrom.ota.changelog;
 
-import android.annotation.NonNull;
-import android.annotation.Nullable;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-
-import com.unnamed.b.atv.model.TreeNode;
-import com.unnamed.b.atv.view.AndroidTreeView;
 
 import org.namelessrom.ota.R;
-import org.namelessrom.ota.listeners.ChangeListener;
-import org.namelessrom.ota.utils.Logger;
 
-import java.util.HashMap;
+public class ChangelogActivity extends Activity {
+    private DrawerLayout mDrawerLayout;
 
-public class ChangelogActivity extends Activity implements ChangeListener {
-    private static final String KEY_STATE = "key_state";
-
-    private final HashMap<String, TreeNode> mNodeMap = new HashMap<>();
-
-    private AndroidTreeView mTreeView;
-    private TextView mStatusChanges;
-    private ChangeFetcher mChangeFetcher;
-
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         setContentView(R.layout.activity_recent_changes);
-        mStatusChanges = (TextView) findViewById(R.id.status_fetched_changes);
-        mStatusChanges.setText(getString(R.string.fetched_changes, 0));
 
-        final FrameLayout container = (FrameLayout) findViewById(R.id.container);
-
-        mTreeView = new AndroidTreeView(this, TreeNode.root());
-        mTreeView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
-        container.addView(mTreeView.getView());
-
-        if (savedInstanceState != null) {
-            String state = savedInstanceState.getString(KEY_STATE);
-            if (!TextUtils.isEmpty(state)) {
-                mTreeView.restoreState(state);
-            }
-        }
-
-        mChangeFetcher = new ChangeFetcher(this, this);
-        mChangeFetcher.fetchNext();
-    }
-
-    private void addChanges(final Change change) {
-        final TreeNode parent;
-        if (mNodeMap.containsKey(change.project)) {
-            parent = mNodeMap.get(change.project);
-        } else {
-            parent = new TreeNode(change.project,
-                    new ProjectHolder.ProjectItem(mapToProject(change.project), change.project));
-            parent.setViewHolder(new ProjectHolder(this));
-            mTreeView.getRoot().addChild(parent);
-            mNodeMap.put(change.project, parent);
-        }
-        final TreeNode child = new TreeNode(change.subject, change);
-        child.setViewHolder(new ChangeHolder(this));
-        parent.addChildren(child);
-    }
-
-    private int mapToProject(final String project) {
-        if (TextUtils.isEmpty(project)) {
-            return R.string.ic_android;
-        }
-
-        if (project.contains("device")) {
-            return R.string.ic_phone2;
-        }
-
-        return R.string.ic_android;
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(KEY_STATE, mTreeView.getSaveState());
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        // inflate our action bar items, nothing special
+        getMenuInflater().inflate(R.menu.menu_recent_changes, menu);
+        return true;
     }
 
     @Override
-    public void onChangesFetched(final boolean success, @Nullable final Change[] changes) {
-        if (changes == null) {
-            Logger.w(this, "Fetched changes are null!");
-            return;
-        }
-
-        Logger.d(this, "Fetched changes -> %s", changes.length);
-        for (final Change change : changes) {
-            addChanges(change);
-        }
-        mTreeView.getRoot().sort();
-        mTreeView.expandNode(mTreeView.getRoot());
-
-        mStatusChanges.setText(getString(R.string.fetched_changes, mChangeFetcher.countFetched()));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
+
         switch (id) {
             case android.R.id.home: {
                 finish();
                 return true;
             }
+            case R.id.action_toggle_drawer: {
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    closeDrawer();
+                } else {
+                    openDrawer();
+                }
+                return true;
+            }
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openDrawer() {
+        mDrawerLayout.openDrawer(GravityCompat.END);
+    }
+
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(GravityCompat.END);
     }
 }

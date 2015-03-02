@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="changes_initial"
+        android:title="@string/changes_initial"
+        android:summary="@string/changes_to_load"
+        android:defaultValue="75"
+        android:inputType="numberSigned"
+        android:persistent="true" />
+    <EditTextPreference
+        android:key="changes_to_fetch"
+        android:title="@string/changes_to_fetch"
+        android:summary="@string/changes_to_load"
+        android:defaultValue="75"
+        android:inputType="numberSigned"
+        android:persistent="true" />
+</PreferenceScreen>
