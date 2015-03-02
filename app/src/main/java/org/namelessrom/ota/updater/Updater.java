@@ -31,6 +31,7 @@ import org.namelessrom.ota.listeners.UpdateListener;
 import org.namelessrom.ota.requests.UpdatesJsonArrayRequest;
 import org.namelessrom.ota.utils.AlarmScheduler;
 import org.namelessrom.ota.utils.Logger;
+import org.namelessrom.ota.utils.NotificationUtil;
 
 import java.util.Date;
 
@@ -56,7 +57,12 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
     }
 
     public void check() {
-        final UpdatesJsonArrayRequest jsArrReq = new UpdatesJsonArrayRequest(getUrl(), this, this);
+        check(this);
+    }
+
+    public void check(Response.Listener<JSONArray> listener) {
+        final UpdatesJsonArrayRequest jsArrReq =
+                new UpdatesJsonArrayRequest(getUrl(), listener, this);
         ((UpdateApplication) mContext.getApplicationContext()).getQueue().add(jsArrReq);
 
         // also note down that we just checked for updates
@@ -67,6 +73,18 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
 
         // update alarm schedule
         AlarmScheduler.get(mContext).scheduleAlarm();
+    }
+
+    public void checkWithNotification() {
+        check(new Response.Listener<JSONArray>() {
+            @Override public void onResponse(JSONArray jsonArray) {
+                Updater.this.onResponse(jsonArray);
+
+                if (jsonArray.length() > 0) {
+                    NotificationUtil.updateAvailable(mContext);
+                }
+            }
+        });
     }
 
     private String getUrl() {

@@ -46,6 +46,7 @@ import org.namelessrom.ota.updater.Updater;
 import org.namelessrom.ota.utils.DownloadHelper;
 import org.namelessrom.ota.utils.IOUtils;
 import org.namelessrom.ota.utils.Logger;
+import org.namelessrom.ota.utils.NotificationUtil;
 import org.namelessrom.ota.utils.PreferenceHelper;
 import org.namelessrom.ota.utils.RebootHelper;
 import org.namelessrom.ota.utils.RecoveryHelper;
@@ -75,12 +76,17 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         //Logger.setEnabled(true);
         Logger.v(TAG, Device.get().toString());
 
+        // cancel pending notifications
+        NotificationUtil.cancelAll(this);
+
+        // register callbacks
         DownloadHelper.registerCallback(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        // unregister callback
         DownloadHelper.unregisterCallback();
     }
 

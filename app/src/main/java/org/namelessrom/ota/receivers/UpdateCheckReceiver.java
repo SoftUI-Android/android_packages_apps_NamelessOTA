@@ -36,7 +36,7 @@ public class UpdateCheckReceiver extends BroadcastReceiver {
 
         Logger.d(this, "checking for updates...");
         final Updater updater = new Updater(context, null);
-        updater.check();
+        updater.checkWithNotification();
     }
 
 }
