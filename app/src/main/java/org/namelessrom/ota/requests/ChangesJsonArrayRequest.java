@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChangesJsonArrayRequest extends Request<Change[]> {
+    private static final String MAGIC = ")]}'";
+
     private final Gson mGson = new Gson();
     private final HashMap<String, String> mHeaders = new HashMap<>();
     private final Response.Listener<Change[]> mListener;
@@ -61,8 +63,14 @@ public class ChangesJsonArrayRequest extends Request<Change[]> {
     @Override
     protected Response<Change[]> parseNetworkResponse(final NetworkResponse networkResponse) {
         try {
-            final String json = new String(networkResponse.data,
+            String json = new String(networkResponse.data,
                     HttpHeaderParser.parseCharset(networkResponse.headers));
+
+            // remove gerrit magic if it exists
+            if (json.startsWith(MAGIC)) {
+                json = json.replaceFirst(String.format("\\%s", MAGIC), "");
+            }
+
             return Response.success(mGson.fromJson(json, Change[].class),
                     HttpHeaderParser.parseCacheHeaders(networkResponse));
         } catch (UnsupportedEncodingException e) {
