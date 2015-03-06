@@ -49,6 +49,7 @@ public class ChangesJsonArrayRequest extends Request<Change[]> {
     public Map<String, String> getHeaders() throws AuthFailureError {
         mHeaders.put("User-Agent", Device.get().userAgent);
         mHeaders.put("Cache-Control", "no-cache");
+        mHeaders.put("Accept", "application/json");
         return mHeaders;
     }
 
