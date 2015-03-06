@@ -9,7 +9,6 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import com.unnamed.b.atv.view.TreeNodeWrapperView;
 
 import org.namelessrom.ota.R;
-import org.namelessrom.ota.changelog.ProjectHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,6 +77,10 @@ public class TreeNode {
         return -1;
     }
 
+    public void clearChildren() {
+        children.clear();
+    }
+
     public List<TreeNode> sort() {
         Collections.sort(children, sTreeComparator);
         for (final TreeNode n : children) {
@@ -141,11 +144,7 @@ public class TreeNode {
     }
 
     public boolean isSelected() {
-        if (mSelectable) {
-            return mSelected;
-        } else {
-            return false;
-        }
+        return mSelectable && mSelected;
     }
 
     public void setSelectable(boolean selectable) {
@@ -162,9 +161,7 @@ public class TreeNode {
         while (node.mParent != null) {
             path.append(mId);
             node = node.mParent;
-            if (node.mParent != null) {
-                path.append(NODES_ID_SEPARATOR);
-            }
+            path.append(NODES_ID_SEPARATOR);
         }
         return path.toString();
     }

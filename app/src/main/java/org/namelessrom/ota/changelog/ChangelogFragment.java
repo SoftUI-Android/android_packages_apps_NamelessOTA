@@ -148,9 +148,17 @@ public class ChangelogFragment extends Fragment implements ChangeListener {
         }
 
         Logger.d(this, "Fetched changes -> %s", changes.length);
+
+        // clear current changes to not add duplicates
+        mNodeMap.clear();
+        mTreeView.getRoot().clearChildren();
+
+        // add changes
         for (final Change change : changes) {
             addChanges(change);
         }
+
+        // sort and refresh
         mTreeView.getRoot().sort();
         mTreeView.expandNode(mTreeView.getRoot());
 
