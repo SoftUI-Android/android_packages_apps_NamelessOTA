@@ -47,7 +47,6 @@ public class UpdateEntry extends JsonAble {
     @SerializedName("downloadurl") public String downloadurl;
     @SerializedName("timestamp") public long timestamp;
     @SerializedName("codename") public String codename;
-    @SerializedName("md5sumdelta") public String md5sumdelta;
 
     public UpdateEntry() {
         // NOOP
@@ -61,7 +60,6 @@ public class UpdateEntry extends JsonAble {
         downloadurl = getJsonString(jsonObject, "downloadurl");
         timestamp = Utils.tryParseLong(getJsonString(jsonObject, "timestamp"));
         codename = getJsonString(jsonObject, "codename");
-        md5sumdelta = getJsonString(jsonObject, "md5sumdelta");
     }
 
 }
