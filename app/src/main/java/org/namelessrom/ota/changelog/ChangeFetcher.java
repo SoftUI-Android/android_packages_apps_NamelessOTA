@@ -31,12 +31,12 @@ import org.namelessrom.ota.utils.Logger;
 public class ChangeFetcher implements Response.Listener<Change[]>, Response.ErrorListener {
     private static final String URL =
             "https://gerrit.nameless-rom.org/changes/?q=status:merged&n=%s";
+    private static final int MAX_CHANGES = 2000;
 
     private final Context mContext;
     private final ChangeListener mListener;
 
     private int mOffset;
-    private int mFetched;
 
     public ChangeFetcher(final Context context, final ChangeListener listener) {
         this(context, listener, ChangeConfig.get(context).changesInitial);
@@ -46,8 +46,6 @@ public class ChangeFetcher implements Response.Listener<Change[]>, Response.Erro
         mContext = context;
         mListener = listener;
         mOffset = offset;
-
-        mFetched = 0;
     }
 
     public ChangeFetcher fetchNext() {
@@ -55,22 +53,22 @@ public class ChangeFetcher implements Response.Listener<Change[]>, Response.Erro
     }
 
     public ChangeFetcher fetchNext(final int count) {
-        // count how many we have fetched
-        mFetched = mOffset;
         // build the URL
         final String url = String.format(URL, mOffset);
-        // increase the offset for the next fetch
-        mOffset += count;
+
+        // increase the offset for the next fetch if we did not hit the cap
+        if (mOffset > MAX_CHANGES) {
+            mOffset = MAX_CHANGES;
+        } else {
+            mOffset += count;
+        }
+
         Logger.d(this, "Url -> %s\nOffset -> %s", url, mOffset);
 
         final ChangesJsonArrayRequest jsArrReq = new ChangesJsonArrayRequest(url, this, this);
         ((UpdateApplication) mContext.getApplicationContext()).getQueue().add(jsArrReq);
 
         return this;
-    }
-
-    public int countFetched() {
-        return mFetched;
     }
 
     @Override

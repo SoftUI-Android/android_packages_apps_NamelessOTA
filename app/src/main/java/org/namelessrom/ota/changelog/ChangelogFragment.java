@@ -162,7 +162,7 @@ public class ChangelogFragment extends Fragment implements ChangeListener {
         mTreeView.getRoot().sort();
         mTreeView.expandNode(mTreeView.getRoot());
 
-        mStatusChanges.setText(getString(R.string.found_changes, mChangeFetcher.countFetched()));
+        mStatusChanges.setText(getString(R.string.found_changes, changes.length));
     }
 
 }
