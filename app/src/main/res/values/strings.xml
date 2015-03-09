@@ -24,6 +24,7 @@
     <string name="delete_update">Delete update</string>
 
     <string name="latest_update">Latest update</string>
+    <string name="latest_update_not_found">There is no update for your device available</string>
     <string name="device">Device</string>
     <string name="type">Type</string>
     <string name="date">Date</string>

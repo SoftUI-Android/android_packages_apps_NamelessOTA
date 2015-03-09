@@ -31,7 +31,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +59,6 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
     private TextView mTitle;
     private ProgressBar mDownloadProgress;
     private TextView mLastChecked;
-    private LinearLayout mLatestUpdateContainer;
     private TextView mLatestUpdate;
     private Button mAction;
     private Button mExtraAction;
@@ -106,8 +104,6 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         mLastChecked = (TextView) findViewById(R.id.last_checked);
         mLastChecked.setText(getString(R.string.last_checked, getTime()));
 
-        mLatestUpdateContainer = (LinearLayout) findViewById(R.id.container_latest_update);
-        mLatestUpdateContainer.setVisibility(View.INVISIBLE);
         mLatestUpdate = (TextView) findViewById(R.id.latest_update);
 
         final Button recentChanges = (Button) findViewById(R.id.recent_changes);
@@ -165,7 +161,6 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         // if our update entry is not null, compare the timestamps
         final boolean hasUpdateEntry = mUpdateEntry != null;
         mUpdateAvailable = hasUpdateEntry && (Utils.getBuildDate() < mUpdateEntry.timestamp);
-        mLatestUpdateContainer.setVisibility(hasUpdateEntry ? View.VISIBLE : View.INVISIBLE);
 
         if (DownloadHelper.isDownloading()) {
             mTitle.setText(R.string.downloading_system_update);
@@ -183,7 +178,8 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
 
         mTitle.setText(mUpdateAvailable ? R.string.update_avail : R.string.update_not_avail);
         mLastChecked.setText(getString(R.string.last_checked, getTime()));
-        mLatestUpdate.setText(getUpdateEntryMsg(mUpdateEntry));
+        mLatestUpdate.setText(hasUpdateEntry
+                ? getUpdateEntryMsg(mUpdateEntry) : getString(R.string.latest_update_not_found));
         mAction.setText(mUpdateAvailable ? R.string.download_update : R.string.check_now);
         mExtraAction.setVisibility(View.INVISIBLE);
     }
