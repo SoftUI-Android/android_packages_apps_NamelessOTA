@@ -28,12 +28,12 @@ public class Device {
 
     private static final Device sInstance = new Device();
 
-    public final String name; // ro.product.device
+    public final String name; // ro.nameless.device
     public final int date;    // ro.nameless.date
     public final String userAgent;
 
     private Device() {
-        name = SystemProperties.get("ro.product.device", UNKNOWN);
+        name = SystemProperties.get("ro.nameless.device", UNKNOWN);
         date = SystemProperties.getInt("ro.nameless.date", -1);
         userAgent = String.format("%s/%s", "org.namelessrom.ota", name);
     }
