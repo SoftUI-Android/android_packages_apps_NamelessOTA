@@ -73,8 +73,7 @@ public class ChangesJsonArrayRequestTest extends TestCase {
         assertEquals(success, false);
         assertNull(changesGerrit);
 
-        final String jsonGerritValid = jsonGerritInvalid.replaceFirst(
-                String.format("\\%s", MAGIC), "");
+        final String jsonGerritValid = jsonGerritInvalid.replaceFirst("\\)\\]\\}'", "").trim();
         assertEquals(jsonGerrit, jsonGerritValid);
 
         success = true;
