@@ -53,4 +53,5 @@
   <string name="daily">Täglich</string>
   <string name="every_third_day">Jeden dritten Tag</string>
   <string name="weekly">Wöchentlich</string>
+  <string name="changes_to_load">Zu ladende Änderungen</string>
 </resources>

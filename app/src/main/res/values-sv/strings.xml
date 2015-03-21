@@ -3,7 +3,6 @@
 <resources>
   <string name="action_all_builds">Visa alla bygger</string>
   <string name="action_preferences">Inställningar</string>
-  <string name="action_refresh">Uppdatera</string>
   <string name="system_updates">Systemuppdateringar</string>
   <string name="update_avail">Det finns en systemuppdatering.</string>
   <string name="update_not_avail">Ditt system är uppdaterat.</string>
