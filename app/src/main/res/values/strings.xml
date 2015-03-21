@@ -64,7 +64,6 @@
     <string name="daily">Daily</string>
     <string name="every_third_day">Every third day</string>
     <string name="weekly">Weekly</string>
-    <string name="title_activity_main">MainActivity</string>
 
     <!-- PREFERENCES RECENT CHANGES -->
     <string name="changes_to_load">Changes to load</string>
