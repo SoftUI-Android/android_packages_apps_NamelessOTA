@@ -39,7 +39,7 @@ public class ChangeFetcher implements Response.Listener<Change[]>, Response.Erro
     private int mOffset;
 
     public ChangeFetcher(final Context context, final ChangeListener listener) {
-        this(context, listener, ChangeConfig.get(context).changesInitial);
+        this(context, listener, ChangeConfig.get(context).changesToFetch);
     }
 
     public ChangeFetcher(final Context context, final ChangeListener listener, final int offset) {

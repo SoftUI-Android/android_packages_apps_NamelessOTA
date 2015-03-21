@@ -67,7 +67,5 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- PREFERENCES RECENT CHANGES -->
-    <string name="changes_initial">Initial changes</string>
-    <string name="changes_to_fetch">Changes to fetch</string>
-    <string name="changes_to_load">Changes to load: %s</string>
+    <string name="changes_to_load">Changes to load</string>
 </resources>
