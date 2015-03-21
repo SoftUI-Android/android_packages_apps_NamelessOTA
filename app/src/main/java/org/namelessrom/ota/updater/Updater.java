@@ -78,11 +78,23 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
     public void checkWithNotification() {
         check(new Response.Listener<JSONArray>() {
             @Override public void onResponse(JSONArray jsonArray) {
-                Updater.this.onResponse(jsonArray);
+                Logger.v(this, "onResponse (with notification) -> %s", jsonArray.toString());
 
+                UpdateEntry updateEntry = null;
                 if (jsonArray.length() > 0) {
+                    try {
+                        updateEntry = new UpdateEntry(jsonArray.getJSONObject(0));
+                    } catch (JSONException jse) {
+                        Logger.e(this, "can not create UpdateEntry from jsonArray", jse);
+                    }
+                }
+
+                if (updateEntry != null && updateEntry.timestamp > Device.get().date) {
                     NotificationUtil.updateAvailable(mContext);
                 }
+
+                // notify the update listener
+                if (mListener != null) mListener.updateCheckFinished(true, updateEntry);
             }
         });
     }
@@ -93,7 +105,8 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
 
     @Override
     public void onResponse(final JSONArray jsonArray) {
-        Logger.v(this, "onResponse: %s", jsonArray.toString());
+        Logger.v(this, "onResponse -> %s", jsonArray.toString());
+
         UpdateEntry updateEntry = null;
         if (jsonArray.length() > 0) {
             try {
@@ -102,6 +115,7 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
                 Logger.e(this, "can not create UpdateEntry from jsonArray", jse);
             }
         }
+
         // notify the update listener
         if (mListener != null) mListener.updateCheckFinished(true, updateEntry);
     }

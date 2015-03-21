@@ -19,7 +19,7 @@
         android:fontFamily="@string/font_light"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="?android:attr/colorAccent"
-        tools:text="Ihr System ist momentan auf dem neuesten Stand." />
+        tools:text="@string/update_not_avail" />
 
     <ProgressBar
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="end"
-            tools:text="Jetzt überprüfen" />
+            tools:text="@string/check_now" />
 
     </LinearLayout>
 
