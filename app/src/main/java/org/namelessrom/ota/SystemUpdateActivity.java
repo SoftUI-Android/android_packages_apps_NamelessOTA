@@ -220,6 +220,7 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         }
         final String updateName = "update.zip";
         final File infoFile = new File(IOUtils.DOWNLOAD_PATH, updateName + ".info");
+        Logger.i(this, "downlading -> %s", mUpdateEntry.downloadurl);
         Utils.writeToFile(infoFile, mUpdateEntry.toJson());
         DownloadHelper.downloadFile(mUpdateEntry.downloadurl, updateName, mUpdateEntry.md5sum);
     }

@@ -19,6 +19,7 @@
 package org.namelessrom.ota.updater;
 
 import android.content.Context;
+import android.os.SystemProperties;
 import android.preference.PreferenceManager;
 
 import com.android.volley.Response;
@@ -36,8 +37,12 @@ import org.namelessrom.ota.utils.NotificationUtil;
 import java.util.Date;
 
 public class Updater implements Response.Listener<JSONArray>, Response.ErrorListener {
-    public static final String SF_URL =
-            "https://sourceforge.net/projects/namelessrom/files/n-2.0/%s/";
+    private static final String PROP_OTA_URL = "ro.nameless.ota.download";
+    private static final String DEFAULT_OTA_URL =
+            "https://sourceforge.net/projects/namelessrom/files/n-2.1/%s/";
+
+    public static final String SF_URL = SystemProperties.get(
+            PROP_OTA_URL, DEFAULT_OTA_URL);
 
     public static final String LAST_UPDATE_CHECK_PREF = "pref_last_update_check";
 
