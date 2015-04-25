@@ -164,8 +164,7 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
 
         if (DownloadHelper.isDownloading()) {
             mTitle.setText(R.string.downloading_system_update);
-            mLastChecked.setText(getString(R.string.download_get_notified) + '\n' + '\n'
-                    + getUpdateEntryMsg(mUpdateEntry));
+            mLastChecked.setText(R.string.download_get_notified);
             mAction.setText(R.string.cancel_download);
             return;
         } else if (DownloadHelper.isDownloaded()) {
