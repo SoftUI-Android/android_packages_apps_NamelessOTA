@@ -21,7 +21,9 @@
   <string name="cancel_download_summary">Haluatko peruuttaa järjestelmän päivityksen lataamisen?</string>
   <string name="system_update_ready">Päivitys on valmis!</string>
   <string name="system_update_ready_message">Laite käynnistyy automaattisesti uudelleen ja asentaa järjestelmäpäivityksen.</string>
+  <string name="backup">Varmuuskopio</string>
   <string name="alert_backup_space_message">SD-kortilla on vapaata tilaa vain %1$sGB. Haluatko jatkaa varmuuskopiointia?</string>
+  <string name="alert_backup_title">Varmuuskopio</string>
   <string name="alert_backup_message">Määritä varmuuskopion nimi (erikoismerkit poistetaan).\n\nTämä asetus toimii vain TWRP recoveryssä.</string>
   <string name="recovery">Recovery-tila</string>
   <string name="androidsecure">Android secure</string>

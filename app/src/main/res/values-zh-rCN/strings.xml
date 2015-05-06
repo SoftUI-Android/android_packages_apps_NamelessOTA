@@ -3,9 +3,12 @@
 <resources>
   <string name="action_all_builds">显示所有版本</string>
   <string name="action_preferences">首选项</string>
+  <string name="action_toggle_drawer">开关抽屉</string>
   <string name="action_refresh">刷新</string>
   <string name="recent_changes">近期更新</string>
   <string name="recent_changes_notice">注意： 最近的变化指的是项目的当前状态\n并不意味着最新版本包含最新更改 ！</string>
+  <string name="searching_changes">查找项目源代码改动......</string>
+  <string name="found_changes">发现改动：%s</string>
   <string name="system_updates">系统更新</string>
   <string name="update_avail">有新的系统更新。</string>
   <string name="update_not_avail">您的系统是最新的</string>
@@ -16,6 +19,7 @@
   <string name="install_update">安装更新</string>
   <string name="delete_update">删除更新</string>
   <string name="latest_update">最新更新</string>
+  <string name="latest_update_not_found">当前您的设备没有可用更新</string>
   <string name="device">设备</string>
   <string name="type">类型</string>
   <string name="date">日期</string>
@@ -49,4 +53,5 @@
   <string name="daily">每天</string>
   <string name="every_third_day">每三天</string>
   <string name="weekly">每周</string>
+  <string name="changes_to_load">要加载的改动</string>
 </resources>
