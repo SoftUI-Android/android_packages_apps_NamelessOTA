@@ -10,7 +10,6 @@ LOCAL_SRC_FILES    := $(call all-java-files-under,java)
 LOCAL_PROGUARD_FLAG_FILES := ../../proguard-rules.pro
 
 LOCAL_PACKAGE_NAME      := NamelessOTA
-LOCAL_CERTIFICATE       := platform
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_MODULE_TAGS       := optional
 
