@@ -3,5 +3,4 @@
 <resources>
   <string name="date">Dátum</string>
   <string name="system">Rendszer</string>
-  <string name="recovery">Recovery</string>
 </resources>
