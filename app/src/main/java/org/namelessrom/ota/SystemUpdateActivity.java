@@ -93,8 +93,6 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_update);
 
-        DownloadHelper.init(this, this);
-
         // setup our action bar
         setupActionBar();
 
@@ -140,6 +138,8 @@ public class SystemUpdateActivity extends Activity implements UpdateListener, Do
                 updateUi();
             }
         });
+
+        DownloadHelper.init(this, this);
 
         updateUi();
         checkForUpdates();
