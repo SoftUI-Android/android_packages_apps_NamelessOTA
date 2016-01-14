@@ -39,7 +39,7 @@ import java.util.Date;
 public class Updater implements Response.Listener<JSONArray>, Response.ErrorListener {
     private static final String PROP_OTA_URL = "ro.nameless.ota.download";
     private static final String DEFAULT_OTA_URL =
-            "https://sourceforge.net/projects/namelessrom/files/n-2.1/%s/";
+            "http://sourceforge.net/projects/soft-ui/files/SoftUI-1.0/%s/";
 
     public static final String SF_URL = SystemProperties.get(
             PROP_OTA_URL, DEFAULT_OTA_URL);
@@ -51,7 +51,7 @@ public class Updater implements Response.Listener<JSONArray>, Response.ErrorList
     public static final String CHECK_THIRD_DAY = "2";
     public static final String CHECK_WEEKLY = "3";
 
-    private static final String URL = "https://nameless-rom.org/update/%s/single";
+    private static final String URL = "https://raw.githubusercontent.com/Soft-UI/changelog/master/%s";
 
     private final Context mContext;
     private final UpdateListener mListener;
